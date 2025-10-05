@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # 讀取環境變數
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
-MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
 MAX_MEDIA_BYTES = int(os.getenv("MAX_MEDIA_BYTES", "3500000"))  # 約 3.5MB 上限
 
 
@@ -176,3 +176,4 @@ def ask():
 # 🟢 主程式入口（本地測試用）
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")))
+
