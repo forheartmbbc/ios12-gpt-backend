@@ -46,17 +46,21 @@ def answer_page(answer_text, back_url=None):
 # 🟢 表單頁面
 def form_page(action_url="/ask"):
     return render_html(
-        "iOS12 ChatGPT 表單",
+        "iOS12 ChatGPT 表單（多媒體升級版）",
         f"""
-<h1>iOS 12 ChatGPT 表單（備用）</h1>
+<h1>iOS 12 ChatGPT 表單（多媒體升級版）</h1>
 <form method="post" action="{html.escape(action_url)}" enctype="multipart/form-data">
   <label>你的問題</label>
   <textarea name="question" placeholder="請輸入問題"></textarea>
-  <label>上傳圖片（可直接拍照）</label>
-  <input type="file" name="image" accept="image/*" capture="camera">
-  <div style="margin-top:14px;"><button type="submit">送出</button></div>
+
+  <label>上傳圖片或影片（可直接拍照或從相簿選取）</label>
+  <input type="file" name="media" accept="image/*,video/*">
+
+  <div style="margin-top:14px;">
+    <button type="submit">送出</button>
+  </div>
 </form>
-<p class="note">提示：iOS 12 可用，圖片上限約 3.5MB。</p>
+<p class="note">提示：可上傳圖片或影片（3.5MB 內），支援 iOS 12 Safari 拍照或選檔。</p>
 """,
     )
 
@@ -157,3 +161,4 @@ def ask():
 # 🟢 主程式入口（本地測試用）
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")))
+
