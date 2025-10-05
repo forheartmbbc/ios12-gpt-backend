@@ -7,7 +7,7 @@ app = Flask(__name__)
 # 讀取環境變數
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-MAX_IMAGE_BYTES = int(os.getenv("MAX_IMAGE_BYTES", "3500000"))  # 約 3.5MB 上限
+MAX_MEDIA_BYTES = int(os.getenv("MAX_MEDIA_BYTES", "3500000"))  # 約 3.5MB 上限
 
 
 # 🧩 簡單 HTML 樣板
@@ -43,12 +43,12 @@ def answer_page(answer_text, back_url=None):
     return render_html("回答結果", f"<h1>回答結果</h1><pre>{html.escape(answer_text)}</pre>{back_link}")
 
 
-# 🟢 表單頁面
+# 🟢 表單頁面（多媒體升級版）
 def form_page(action_url="/ask"):
     return render_html(
-        "iOS12 ChatGPT 表單（多媒體升級版）",
+        "iOS12 ChatGPT",
         f"""
-<h1>iOS 12 ChatGPT 表單（多媒體升級版）</h1>
+<h1>iOS 12 ChatGPT</h1>
 <form method="post" action="{html.escape(action_url)}" enctype="multipart/form-data">
   <label>你的問題</label>
   <textarea name="question" placeholder="請輸入問題"></textarea>
@@ -71,7 +71,7 @@ def index():
     return form_page("/ask")
 
 
-# 🟢 主要邏輯：接收提問與圖片
+# 🟢 主要邏輯：接收提問與媒體檔案
 @app.route("/ask", methods=["POST"])
 def ask():
     if not OPENAI_API_KEY:
@@ -80,36 +80,49 @@ def ask():
         ), 500
 
     question = (request.form.get("question") or "").strip()
-    img_file = request.files.get("image")
+    media_file = request.files.get("media")
     referer = request.headers.get("Referer", "")
 
-    if not question and not img_file:
+    if not question and not media_file:
         return render_html(
             "缺少內容",
-            "<h1>請至少輸入問題或上傳圖片</h1><a class='btn' href='javascript:history.back()'>← 返回</a>",
+            "<h1>請至少輸入問題或上傳圖片／影片</h1><a class='btn' href='javascript:history.back()'>← 返回</a>",
         ), 400
 
-    # 📸 處理圖片
-    image_block = None
-    if img_file and img_file.filename:
-        img_bytes = img_file.read()
-        if len(img_bytes) > MAX_IMAGE_BYTES:
+    # 📸 處理媒體檔案
+    media_block = None
+    if media_file and media_file.filename:
+        filetype = media_file.mimetype
+        media_bytes = media_file.read()
+
+        if len(media_bytes) > MAX_MEDIA_BYTES:
             return render_html(
-                "圖片過大",
-                f"<h1>圖片超過 {MAX_IMAGE_BYTES//1000000}MB，請壓小再上傳</h1>"
+                "檔案過大",
+                f"<h1>檔案超過 {MAX_MEDIA_BYTES//1000000}MB，請壓小再上傳</h1>"
                 "<a class='btn' href='javascript:history.back()'>← 返回</a>",
             ), 400
-        b64 = base64.b64encode(img_bytes).decode("utf-8")
-        image_block = {
-            "type": "image_url",
-            "image_url": {"url": f"data:image/jpeg;base64,{b64}"},
-        }
+
+        # 影像檔案：轉 Base64
+        if filetype.startswith("image/"):
+            b64 = base64.b64encode(media_bytes).decode("utf-8")
+            media_block = {
+                "type": "image_url",
+                "image_url": {"url": f"data:{filetype};base64,{b64}"},
+            }
+
+        # 影片檔案：以文字描述方式傳給模型（防止超流量）
+        elif filetype.startswith("video/"):
+            filename = html.escape(media_file.filename)
+            media_block = {
+                "type": "text",
+                "text": f"[使用者上傳了一段影片（{filename}，格式 {filetype}），請根據文字問題回答。]"
+            }
 
     # 組合訊息內容
-    if image_block:
+    if media_block:
         content = [
-            {"type": "text", "text": question or "請根據圖片說明重點"},
-            image_block,
+            {"type": "text", "text": question or "請根據上傳內容說明重點"},
+            media_block,
         ]
     else:
         content = question
@@ -120,7 +133,7 @@ def ask():
         "messages": [
             {
                 "role": "system",
-                "content": "你是簡潔、有條理的中文助理，回覆請精確扼要。",
+                "content": "你是簡潔、有條理的中文助理，請用清晰短句回覆。",
             },
             {"role": "user", "content": content},
         ],
@@ -141,6 +154,8 @@ def ask():
 
         if resp.status_code >= 400:
             msg = data.get("error", {}).get("message", f"HTTP {resp.status_code}")
+            if "quota" in msg:
+                msg = "目前 OpenAI API 額度不足，請更新金鑰或稍後再試。"
             return render_html(
                 "OpenAI 錯誤",
                 f"<h1>OpenAI 回應錯誤</h1><pre>{html.escape(msg)}</pre>"
@@ -161,4 +176,3 @@ def ask():
 # 🟢 主程式入口（本地測試用）
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")))
-
