@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ios12-gpt-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app -b 0.0.0.0:$PORT
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false   # 到 Render 介面手動填入
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: MAX_IMAGE_BYTES
+        value: "3500000"
