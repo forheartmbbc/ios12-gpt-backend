@@ -110,4 +110,4 @@ def ask():
         data = resp.json()
         if resp.status_code >= 400:
             msg = data.get("error", {}).get("message", f"HTTP {resp.status_code}")
-            return render_html("OpenAI 錯誤", f"<h1>OpenAI 回應錯誤</h1><pre>{html.escape(msg)}</pre><a class='btn' hr_
+            return render_html("OpenAI 錯誤", f"<h1>OpenAI 回應錯誤</h1><pre>{html.escape(msg)}</pre><a class='btn' href='javascript:history.back()'>← 返回</a>")
