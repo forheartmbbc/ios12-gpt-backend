@@ -15,7 +15,7 @@ def render_html(title, body_html):
 <style>
 body{{
   font-family:"Microsoft JhengHei","微軟正黑體","PingFang TC",Arial,sans-serif;
-  font-size:12px;
+  font-size:16px;
   background:#f6f7f9;
   color:#222;
   margin:0;
@@ -23,10 +23,10 @@ body{{
   line-height:1.6;
 }}
 .container{{max-width:680px;margin:0 auto;}}
-h1{{font-size:14px;margin:0 0 12px;font-weight:bold;}}
+h1{{font-size:18px;margin:0 0 12px;font-weight:bold;}}
 label{{display:block;margin:12px 0 6px;}}
 input,textarea,button{{
-  font-size:12px;
+  font-size:16px;
   font-family:"Microsoft JhengHei","微軟正黑體",Arial,sans-serif;
 }}
 textarea{{width:100%;min-height:120px;padding:10px;}}
@@ -35,7 +35,7 @@ button{{
   color:#fff;
   border:0;
   border-radius:8px;
-  padding:8px 14px;
+  padding:10px 16px;
   cursor:pointer;
 }}
 pre{{
@@ -43,21 +43,21 @@ pre{{
   background:#fff;
   border:1px solid #e5e7eb;
   border-radius:8px;
-  padding:10px;
-  font-size:12px;
+  padding:12px;
+  font-size:16px;
   font-family:"Microsoft JhengHei",monospace;
 }}
-.note{{color:#666;font-size:11px;}}
+.note{{color:#666;font-size:14px;}}
 a.btn{{
   display:inline-block;
   margin-top:14px;
   text-decoration:none;
   background:#e5e7eb;
   color:#111;
-  padding:6px 10px;
+  padding:8px 12px;
   border-radius:8px;
 }}
-footer{{margin-top:20px;color:#777;font-size:11px;}}
+footer{{margin-top:20px;color:#777;font-size:14px;}}
 </style></head><body><div class="container">
 {body_html}
 <footer>© iOS12 GPT Gateway · Render 服務提供</footer>
@@ -74,9 +74,9 @@ def answer_page(answer_text, back_url=None):
 
 def form_page(action_url="/ask"):
     return render_html(
-        "iOS12 ChatGPT 表單（多媒體升級版）",
+        "iOS12 ChatGPT",
         f"""
-<h1>iOS 12 ChatGPT 表單（多媒體升級版）</h1>
+<h1>iOS 12 ChatGPT</h1>
 <form method="post" action="{html.escape(action_url)}" enctype="multipart/form-data">
   <label>你的問題</label>
   <textarea name="question" placeholder="請輸入問題"></textarea>
