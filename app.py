@@ -15,7 +15,7 @@ def render_html(title, body_html):
 <style>
 body{{
   font-family:"Microsoft JhengHei","微軟正黑體","PingFang TC",Arial,sans-serif;
-  font-size:16px;
+  font-size:20px;
   background:#f6f7f9;
   color:#222;
   margin:0;
@@ -26,7 +26,7 @@ body{{
 h1{{font-size:18px;margin:0 0 12px;font-weight:bold;}}
 label{{display:block;margin:12px 0 6px;}}
 input,textarea,button{{
-  font-size:16px;
+  font-size:20px;
   font-family:"Microsoft JhengHei","微軟正黑體",Arial,sans-serif;
 }}
 textarea{{width:100%;min-height:120px;padding:10px;}}
@@ -35,7 +35,7 @@ button{{
   color:#fff;
   border:0;
   border-radius:8px;
-  padding:10px 16px;
+  padding:10px 20px;
   cursor:pointer;
 }}
 pre{{
@@ -44,7 +44,7 @@ pre{{
   border:1px solid #e5e7eb;
   border-radius:8px;
   padding:12px;
-  font-size:16px;
+  font-size:20px;
   font-family:"Microsoft JhengHei",monospace;
 }}
 .note{{color:#666;font-size:14px;}}
@@ -177,3 +177,4 @@ def ask():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")))
+
