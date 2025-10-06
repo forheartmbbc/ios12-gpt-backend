@@ -16,18 +16,74 @@ def render_html(title, body_html):
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(title)}</title>
 <style>
-body{{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;background:#f6f7f9;color:#222;margin:0;padding:24px;}}
-.container{{max-width:680px;margin:0 auto;}}
-h1{{font-size:20px;margin:0 0 12px;}}
-label{{display:block;margin:12px 0 6px;}}
-input,textarea,button{{font-size:16px;}}
-textarea{{width:100%;min-height:120px;padding:10px;}}
-button{{background:#10a37f;color:#fff;border:0;border-radius:8px;padding:10px 16px;}}
-pre{{white-space:pre-wrap;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;}}
-.note{{color:#666;font-size:14px;}}
-a.btn{{display:inline-block;margin-top:14px;text-decoration:none;background:#e5e7eb;color:#111;padding:8px 12px;border-radius:8px;}}
-footer{{margin-top:24px;color:#777;font-size:13px;}}
-</style></head><body><div class="container">
+body{
+  font-family:"Microsoft JhengHei", "微軟正黑體", "PingFang TC", Arial, sans-serif;
+  font-size:12px;
+  background:#f6f7f9;
+  color:#222;
+  margin:0;
+  padding:24px;
+  line-height:1.6;
+}
+.container{
+  max-width:680px;
+  margin:0 auto;
+}
+h1{
+  font-size:14px;
+  margin:0 0 12px;
+  font-weight:bold;
+}
+label{
+  display:block;
+  margin:12px 0 6px;
+}
+input,textarea,button{
+  font-size:12px;
+  font-family:"Microsoft JhengHei", "微軟正黑體", Arial, sans-serif;
+}
+textarea{
+  width:100%;
+  min-height:120px;
+  padding:10px;
+}
+button{
+  background:#10a37f;
+  color:#fff;
+  border:0;
+  border-radius:8px;
+  padding:8px 14px;
+  cursor:pointer;
+}
+pre{
+  white-space:pre-wrap;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:8px;
+  padding:10px;
+  font-size:12px;
+  font-family:"Microsoft JhengHei", monospace;
+}
+.note{
+  color:#666;
+  font-size:11px;
+}
+a.btn{
+  display:inline-block;
+  margin-top:14px;
+  text-decoration:none;
+  background:#e5e7eb;
+  color:#111;
+  padding:6px 10px;
+  border-radius:8px;
+}
+footer{
+  margin-top:20px;
+  color:#777;
+  font-size:11px;
+}
+</style>
+</head><body><div class="container">
 {body_html}
 <footer>© iOS12 GPT Gateway · Render 服務提供</footer>
 </div></body></html>"""
@@ -176,4 +232,5 @@ def ask():
 # 🟢 主程式入口（本地測試用）
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")))
+
 
